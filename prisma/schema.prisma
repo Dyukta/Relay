@@ -1,13 +1,106 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+//Enums 
+
+enum ExecutionStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  SUCCESS
+  FAILED
+  RETRYING
+}
+
+enum WorkflowStatus {
+  ACTIVE
+  DISABLED
+  ERROR
+}
+
+enum ActionType {
+  SEND_EMAIL
+  FORWARD_WEBHOOK
+}
+
+//Models 
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  workspace    Workspace?
+}
+
+model Workspace {
+  id            String     @id @default(cuid())
+  userId        String     @unique
+  signingSecret String
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workflows     Workflow[]
+  apiKeys       ApiKey[]
+}
+
+model Workflow {
+  id           String         @id @default(cuid())
+  workspaceId  String
+  name         String
+  actionType   ActionType
+  actionConfig Json
+  status       WorkflowStatus @default(ACTIVE)
+  webhookId    String         @unique @default(cuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  workspace    Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  executions   Execution[]
+}
+
+model Execution {
+  id          String          @id @default(cuid())
+  workflowId  String
+  status      ExecutionStatus @default(PENDING)
+  durationMs  Int?
+  payload     Json?
+  startedAt   DateTime        @default(now())
+  completedAt DateTime?
+
+  workflow    Workflow        @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  logs        ExecutionLog[]
+}
+
+model ExecutionLog {
+  id          String    @id @default(cuid())
+  executionId String
+  level       String
+  message     String
+  timestamp   DateTime  @default(now())
+
+  execution   Execution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  workspaceId String
+  name        String
+  keyHash     String
+  keyPreview  String
+  createdAt   DateTime  @default(now())
+  lastUsedAt  DateTime?
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
