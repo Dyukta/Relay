@@ -1,4 +1,3 @@
-// src/shared/components/AppShell.tsx
 import { AppSidebar } from "@/shared/components/AppSidebar"
 import { AppHeader } from "@/shared/components/AppHeader"
 

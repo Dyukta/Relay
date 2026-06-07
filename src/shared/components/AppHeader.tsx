@@ -1,4 +1,3 @@
-// src/shared/components/AppHeader.tsx
 "use client"
 
 import { useState } from "react"

@@ -1,4 +1,3 @@
-// src/shared/components/PageHeader.tsx
 interface PageHeaderProps {
   title: string
   description?: string

@@ -1,4 +1,3 @@
-// src/features/auth/services/registerService.ts
 import { hash } from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { generateSecret } from "@/lib/hmac"

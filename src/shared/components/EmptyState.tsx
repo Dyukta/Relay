@@ -1,4 +1,3 @@
-// src/shared/components/EmptyState.tsx
 interface EmptyStateProps {
   title: string
   description?: string

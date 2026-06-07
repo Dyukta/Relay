@@ -102,7 +102,7 @@ export const RegisterForm = () => {
               <input
                 name="name"
                 type="text"
-                placeholder="Ada Lovelace"
+                placeholder="Enter your name"
                 value={values.name}
                 onChange={handleChange}
                 className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2.5 text-white text-sm placeholder-[#444] focus:outline-none focus:border-indigo-500 transition-colors"
@@ -117,7 +117,7 @@ export const RegisterForm = () => {
               <input
                 name="email"
                 type="email"
-                placeholder="you@company.com"
+                placeholder="Enter your email"
                 value={values.email}
                 onChange={handleChange}
                 className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2.5 text-white text-sm placeholder-[#444] focus:outline-none focus:border-indigo-500 transition-colors"
@@ -132,7 +132,7 @@ export const RegisterForm = () => {
               <input
                 name="password"
                 type="password"
-                placeholder="At least 12 characters"
+                placeholder="Enter password"
                 value={values.password}
                 onChange={handleChange}
                 className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2.5 text-white text-sm placeholder-[#444] focus:outline-none focus:border-indigo-500 transition-colors"

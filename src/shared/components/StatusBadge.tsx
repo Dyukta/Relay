@@ -1,4 +1,3 @@
-// src/shared/components/StatusBadge.tsx
 import { cn } from "@/shared/utils/cn"
 
 type Status =
@@ -19,39 +18,39 @@ interface StatusBadgeProps {
 const statusConfig: Record<Status, { label: string; className: string }> = {
   PENDING: {
     label: "Pending",
-    className: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    className: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
   },
   QUEUED: {
     label: "Queued",
-    className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    className: "bg-blue-500/10 text-blue-400 border-blue-500/20"
   },
   RUNNING: {
     label: "Running",
-    className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    className: "bg-blue-500/10 text-blue-400 border-blue-500/20"
   },
   SUCCESS: {
     label: "Success",
-    className: "bg-green-500/10 text-green-400 border-green-500/20",
+    className: "bg-green-500/10 text-green-400 border-green-500/20"
   },
   FAILED: {
     label: "Failed",
-    className: "bg-red-500/10 text-red-400 border-red-500/20",
+    className: "bg-red-500/10 text-red-400 border-red-500/20"
   },
   RETRYING: {
     label: "Retrying",
-    className: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    className: "bg-orange-500/10 text-orange-400 border-orange-500/20"
   },
   ACTIVE: {
     label: "Active",
-    className: "bg-green-500/10 text-green-400 border-green-500/20",
+    className: "bg-green-500/10 text-green-400 border-green-500/20"
   },
   DISABLED: {
     label: "Disabled",
-    className: "bg-[#ffffff0f] text-[#666] border-[#ffffff10]",
+    className: "bg-[#ffffff0f] text-[#666] border-[#ffffff10]"
   },
   ERROR: {
     label: "Error",
-    className: "bg-red-500/10 text-red-400 border-red-500/20",
+    className: "bg-red-500/10 text-red-400 border-red-500/20"
   },
 }
 

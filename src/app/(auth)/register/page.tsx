@@ -1,7 +1,7 @@
 import { RegisterForm } from "@/features/auth/components/RegisterForm"
 
 export const metadata = {
-  title: "Create account: Relay",
+  title: "Sign up",
 }
 
 export default function RegisterPage() {
