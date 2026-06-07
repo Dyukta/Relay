@@ -116,7 +116,7 @@ export const WorkflowDetailPage = ({
           <div className="space-y-2">
             {Object.entries(workflow.actionConfig).map(([key, value]) => (
               <div key={key} className="flex gap-3">
-                <span className="text-[#555] text-xs w-24 flex-shrink-0 pt-0.5">
+                <span className="text-[#555] text-xs w-24 shrink-0 pt-0.5">
                   {key}
                 </span>
                 <span className="text-[#888] text-xs break-all font-mono">

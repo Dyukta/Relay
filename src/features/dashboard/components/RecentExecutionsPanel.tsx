@@ -49,7 +49,7 @@ export const RecentExecutionsPanel = ({
                   {execution.id.slice(0, 12)}
                 </span>
               </div>
-              <div className="flex items-center gap-4 flex-shrink-0 ml-4">
+              <div className="flex items-center gap-4 shrink-0 ml-4">
                 <span className="text-[#555] text-xs">
                   {execution.durationMs
                     ? formatDuration(execution.durationMs)

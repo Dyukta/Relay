@@ -55,7 +55,7 @@ export const AppSidebar = () => {
     <aside className="w-56 h-screen bg-[#0f0f0f] border-r border-[#1f1f1f] flex flex-col fixed left-0 top-0">
       {/* Logo */}
       <div className="flex items-center gap-2 px-4 h-14 border-b border-[#1f1f1f]">
-        <div className="w-7 h-7 bg-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-7 h-7 bg-indigo-500 rounded-lg flex items-center justify-center shrink-0">
           <span className="text-white text-xs font-bold">R</span>
         </div>
         <span className="text-white text-sm font-semibold">Relay</span>

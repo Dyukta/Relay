@@ -18,12 +18,12 @@ export const ExecutionLogEntry = ({ log }: ExecutionLogEntryProps) => {
 
   return (
     <div className="flex items-start gap-3 py-2 border-b border-[#1a1a1a] last:border-0">
-      <span className="text-[#444] text-xs font-mono flex-shrink-0 pt-0.5">
+     <span className="text-[#444] text-xs font-mono shrink-0 pt-0.5">
         {time}
       </span>
       <span
         className={cn(
-          "text-xs px-1.5 py-0.5 rounded border font-medium flex-shrink-0",
+          "text-xs px-1.5 py-0.5 rounded border font-medium shrink-0",
           levelClass
         )}
       >
