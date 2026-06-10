@@ -8,6 +8,16 @@ The project was built to explore the architecture behind developer focused autom
 
 live link: https://relay-taupe-tau.vercel.app/
 
+
+|                                                                                                           |                                                                                                           |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/user-attachments/assets/a527ab2a-809d-406d-b101-2a64de2bdb8d" width="100%"/> | <img src="https://github.com/user-attachments/assets/881f3991-ebdf-44d7-b80e-f80f62daaafd" width="100%"/> |
+| <img src="https://github.com/user-attachments/assets/04a37ce8-7704-4bcb-bc46-c89071a91589" width="100%"/> | <img src="https://github.com/user-attachments/assets/dd63fac5-54ec-47de-a1e0-d23f4029f77c" width="100%"/> |
+| <img src="https://github.com/user-attachments/assets/07144891-281d-411c-8912-e312e6518ab0" width="100%"/> | <img src="https://github.com/user-attachments/assets/9acc988d-372c-4978-8480-cc7da574a51a" width="100%"/> |
+| <img src="https://github.com/user-attachments/assets/d7be725b-fe9b-48a3-8685-0f50ef7a444f" width="100%"/> | <img src="https://github.com/user-attachments/assets/f3045127-9a34-4a33-bfd1-60413dfc5206" width="100%"/> |
+| <img src="https://github.com/user-attachments/assets/84ecbe43-f3a0-4717-aa0b-30001b168aab" width="100%"/> | <img src="https://github.com/user-attachments/assets/6c6f69a9-6f69-4ec1-94b4-f91169cb469e" width="100%"/> |
+| <img src="https://github.com/user-attachments/assets/7bd24773-5855-46fc-acaf-037a871fef3c" width="100%"/> | <img src="https://github.com/user-attachments/assets/75c1f87c-ca08-4a7a-96e1-272049960fdf" width="100%"/> |
+
 ---
 
 ## Overview
