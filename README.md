@@ -205,19 +205,7 @@ Invoke-WebRequest `
   -Body '{"type": "payment.succeeded", "amount": 4900, "currency": "usd"}'
 ```
 
----
 
-## Environment variables
-
-```
-DATABASE_URL              PostgreSQL connection string
-NEXTAUTH_SECRET           Random 32-byte hex string
-NEXTAUTH_URL              http://localhost:3000
-NEXT_PUBLIC_APP_URL       http://localhost:3000
-RESEND_API_KEY            Optional — emails log to console if not set
-```
-
----
 
 ## What this demonstrates
 
