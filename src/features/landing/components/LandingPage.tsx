@@ -1,283 +1,286 @@
+"use client"
+
 import Link from "next/link"
+import { Activity, ArrowRight, Shield, Workflow, type LucideIcon } from "lucide-react"
 
-export const LandingPage = () => {
+const containerClass = "mx-auto max-w-6xl px-6"
+
+const featureCardClass =
+  "rounded-2xl border border-neutral-200 bg-neutral-50 p-7 transition-colors hover:border-indigo-300 hover:bg-indigo-50/30"
+
+const executions = [
+  {
+    time: "16:42:11.024",
+    level: "INFO",
+    message: "Event received from 54.187.174.169",
+  },
+  {
+    time: "16:42:11.041",
+    level: "INFO",
+    message: "Job queued in workers.default",
+  },
+  {
+    time: "16:42:11.118",
+    level: "INFO",
+    message: "Worker w-04 picked up job ej_8a72d",
+  },
+  {
+    time: "16:42:11.201",
+    level: "INFO",
+    message: "Sending email to billing@acme.co",
+  },
+  {
+    time: "16:42:11.308",
+    level: "SUCCESS",
+    message: "Email delivered to billing@acme.co",
+  },
+  {
+    time: "16:42:11.312",
+    level: "SUCCESS",
+    message: "Execution completed in 288ms",
+  }
+] as const
+
+const features = [
+  {
+    icon: Workflow,
+    title: "Workflow Automation",
+    description:
+      "Trigger workflows from webhooks and connect actions across your stack."
+  },
+  {
+    icon: Activity,
+    title: "Execution Tracking",
+    description:
+      "Inspect every run with logs, payloads, durations and status history."
+  },
+  {
+    icon: Shield,
+    title: "Built-in Security",
+    description:
+      "Verify requests with signatures, API keys and authenticated sessions."
+  },
+] satisfies {
+  icon: LucideIcon
+  title: string
+  description: string
+}[]
+
+function Header() {
   return (
-    <div className="min-h-screen bg-[#080808] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
-        .relay-mono { font-family: 'DM Mono', monospace; }
-        .nav-link { color: #555; font-size: 12px; transition: color 0.15s; font-family: 'DM Mono', monospace; }
-        .nav-link:hover { color: #fff; }
-        .doc-divider { border: none; border-top: 1px solid #111; margin: 0; }
-        .log-row { display: flex; align-items: flex-start; gap: 14px; padding: 7px 0; border-bottom: 1px solid #0d0d0d; }
-        .log-row:last-child { border-bottom: none; }
-        .doc-row { display: flex; align-items: baseline; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid #111; }
-        .doc-row:last-child { border-bottom: none; }
-        .toc-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-        .feature-card { background: #0d0d0d; border: 1px solid #161616; border-radius: 10px; padding: 20px; }
-        .btn-primary { display: inline-block; background: #6366f1; color: #fff; border-radius: 7px; padding: 9px 18px; font-size: 12px; font-family: 'DM Mono', monospace; transition: background 0.15s; }
-        .btn-primary:hover { background: #5558e8; }
-        .btn-ghost { display: inline-block; color: #555; border: 1px solid #1f1f1f; border-radius: 7px; padding: 9px 18px; font-size: 12px; font-family: 'DM Mono', monospace; transition: color 0.15s, border-color 0.15s; }
-        .btn-ghost:hover { color: #fff; border-color: #333; }
-        .tag { font-family: 'DM Mono', monospace; font-size: 10px; color: #333; text-transform: uppercase; letter-spacing: 0.1em; }
-        .code-inline { font-family: 'DM Mono', monospace; font-size: 11px; color: #6366f1; background: rgba(99,102,241,0.08); padding: 1px 5px; border-radius: 3px; }
-      `}</style>
+    <header className="border-b border-neutral-200">
+      <div
+        className={`${containerClass} flex h-14 items-center justify-between`}
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500 text-xs font-bold text-white">
+            R
+          </div>
 
-      {/* Nav */}
-      <nav style={{ borderBottom: "1px solid #111", position: "sticky", top: 0, zIndex: 50, background: "#080808" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 32px", height: 50, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 24, height: 24, background: "#6366f1", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span className="relay-mono" style={{ color: "#fff", fontSize: 10, fontWeight: 500 }}>R</span>
-            </div>
-            <span style={{ fontSize: 14, fontWeight: 500, letterSpacing: "-0.02em" }}>Relay</span>
-          </div>
-          <div style={{ display: "flex", gap: 24 }}>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav-link">GitHub</a>
-            <Link href="/login" className="nav-link">Sign in →</Link>
-          </div>
+          <span className="text-sm font-medium">Relay</span>
         </div>
-      </nav>
 
-      {/* Hero */}
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "80px 32px 72px" }}>
-        <h1 style={{ fontSize: "clamp(38px, 5vw, 58px)", fontWeight: 300, letterSpacing: "-0.035em", lineHeight: 1.05, color: "#fff", marginBottom: 24, maxWidth: 600 }}>
-          Automate workflows.<br />
-          <span style={{ color: "#6366f1" }}>Debug with confidence.</span>
-        </h1>
-        <p style={{ fontSize: 16, fontWeight: 300, color: "#555", lineHeight: 1.75, maxWidth: 460, marginBottom: 36 }}>
-          Relay receives events through webhook endpoints, processes them asynchronously, and gives you full observability into every execution — logs, payloads, and failures in one place.
-        </p>
-        <div style={{ display: "flex", gap: 10 }}>
-          <Link href="/register" className="btn-primary">Get started free →</Link>
-          <Link href="/login" className="btn-ghost">View demo</Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
+          >
+            Sign in
+          </Link>
+
+          <Link
+            href="/register"
+            className="rounded-lg bg-indigo-500 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
+          >
+            Sign up
+          </Link>
         </div>
-      </section>
+      </div>
+    </header>
+  )
+}
 
-      {/* Execution log preview */}
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "0 32px 80px" }}>
-        <div style={{ maxWidth: 620, background: "#0d0d0d", border: "1px solid #161616", borderRadius: 12, overflow: "hidden" }}>
-          <div style={{ padding: "10px 16px", borderBottom: "1px solid #111", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", gap: 6 }}>
-              {[0,1,2].map(i => <div key={i} style={{ width: 9, height: 9, borderRadius: "50%", background: "#1a1a1a" }} />)}
-            </div>
-            <span className="relay-mono" style={{ fontSize: 10, color: "#2a2a2a" }}>relay.dev/executions/ex_a8f3b21</span>
-            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#4ade80", display: "inline-block" }} />
-              <span className="relay-mono" style={{ fontSize: 10, color: "#4ade80" }}>SUCCESS</span>
-            </div>
-          </div>
-          <div style={{ padding: "6px 16px 10px" }}>
-            {[
-              { t: "16:42:11.024", l: "INFO",    m: "Event received from 54.187.174.169",   info: true },
-              { t: "16:42:11.041", l: "INFO",    m: "Job queued in workers.default",         info: true },
-              { t: "16:42:11.118", l: "INFO",    m: "Worker w-04 picked up job ej_8a72d",    info: true },
-              { t: "16:42:11.201", l: "INFO",    m: "Sending email to billing@acme.co",      info: true },
-              { t: "16:42:11.308", l: "SUCCESS", m: "Email delivered to billing@acme.co",    info: false },
-              { t: "16:42:11.312", l: "SUCCESS", m: "Execution completed in 288ms",          info: false },
-            ].map((row, i) => (
-              <div key={i} className="log-row">
-                <span className="relay-mono" style={{ fontSize: 10, color: "#222", flexShrink: 0 }}>{row.t}</span>
-                <span className="relay-mono" style={{ fontSize: 9, padding: "2px 6px", borderRadius: 3, flexShrink: 0, color: row.info ? "#6366f1" : "#4ade80", background: row.info ? "rgba(99,102,241,0.08)" : "rgba(74,222,128,0.08)" }}>{row.l}</span>
-                <span className="relay-mono" style={{ fontSize: 10, color: "#3a3a3a" }}>{row.m}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <hr className="doc-divider" />
-
-      {/* Architecture */}
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "72px 32px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 72, alignItems: "start" }}>
+function HeroSection() {
+  return (
+    <section className="py-20">
+      <div className={containerClass}>
+        <div className="grid gap-12 lg:grid-cols-[1fr_0.8fr]">
           <div>
-            <p className="tag" style={{ marginBottom: 16 }}>Architecture</p>
-            <h2 style={{ fontSize: 30, fontWeight: 300, letterSpacing: "-0.03em", color: "#fff", lineHeight: 1.2, marginBottom: 18, maxWidth: 340 }}>
-              One endpoint.<br />Full pipeline visibility.
-            </h2>
-            <p style={{ fontSize: 14, fontWeight: 300, color: "#555", lineHeight: 1.75, marginBottom: 32, maxWidth: 380 }}>
-              Every webhook event travels through a structured pipeline. Each step is logged, timed, and stored — so when something fails, you know exactly where and why.
-            </p>
-            {[
-              { n: "01", label: "Receive", desc: "HMAC-verified POST to a generated endpoint" },
-              { n: "02", label: "Queue",   desc: "Job enqueued with payload and workflow config" },
-              { n: "03", label: "Execute", desc: "Worker runs the action — email or webhook" },
-              { n: "04", label: "Log",     desc: "Every step written to the execution record" },
-            ].map((s, i, arr) => (
-              <div key={i} style={{ display: "flex", gap: 14, padding: "11px 0", borderBottom: i < arr.length - 1 ? "1px solid #111" : "none" }}>
-                <span className="relay-mono" style={{ fontSize: 10, color: "#222", paddingTop: 2, width: 18, flexShrink: 0 }}>{s.n}</span>
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 500, color: "#fff", marginBottom: 2 }}>{s.label}</p>
-                  <p style={{ fontSize: 12, color: "#444", lineHeight: 1.5 }}>{s.desc}</p>
-                </div>
-              </div>
-            ))}
+            <h1 className="max-w-[10ch] text-5xl leading-[0.92] tracking-tight sm:text-6xl lg:text-[4rem]">
+              Turn events into actions.
+              <span className="block text-indigo-500">
+                Track every execution.
+              </span>
+            </h1>
           </div>
 
-          {/* Dashboard preview */}
-          <div style={{ background: "#0d0d0d", border: "1px solid #161616", borderRadius: 12, overflow: "hidden" }}>
-            <div style={{ padding: "10px 16px", borderBottom: "1px solid #111" }}>
-              <p className="tag">Dashboard overview</p>
-            </div>
-            <div style={{ padding: "12px 16px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-              {[
-                { l: "Total executions", v: "18,398" },
-                { l: "Success rate",     v: "97.5%" },
-                { l: "Avg latency",      v: "284ms" },
-              ].map(s => (
-                <div key={s.l} style={{ background: "#0a0a0a", border: "1px solid #111", borderRadius: 8, padding: "12px 14px" }}>
-                  <p className="tag" style={{ marginBottom: 6 }}>{s.l}</p>
-                  <p style={{ fontSize: 18, fontWeight: 300, color: "#fff" }}>{s.v}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ margin: "0 16px 16px", background: "#0a0a0a", border: "1px solid #111", borderRadius: 8, overflow: "hidden" }}>
-              <div style={{ padding: "7px 12px", borderBottom: "1px solid #0f0f0f" }}>
-                <p className="tag">Recent executions</p>
-              </div>
-              {[
-                { name: "Stripe Payment Notifier",  s: "SUCCESS", ms: "389ms", ok: true },
-                { name: "GitHub Issue → Linear",    s: "SUCCESS", ms: "498ms", ok: true },
-                { name: "Shopify Order Forwarder",  s: "FAILED",  ms: "266ms", ok: false },
-                { name: "Internal Slack Alerts",    s: "SUCCESS", ms: "196ms", ok: true },
-              ].map((r, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 12px", borderBottom: "1px solid #0d0d0d" }}>
-                  <span className="relay-mono" style={{ fontSize: 10, color: "#3a3a3a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, marginRight: 8 }}>{r.name}</span>
-                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                    <span className="relay-mono" style={{ fontSize: 9, color: r.ok ? "#4ade80" : "#f87171", background: r.ok ? "rgba(74,222,128,0.08)" : "rgba(248,113,113,0.08)", padding: "2px 5px", borderRadius: 3 }}>{r.s}</span>
-                    <span className="relay-mono" style={{ fontSize: 9, color: "#222" }}>{r.ms}</span>
-                  </div>
-                </div>
-              ))}
+          <div className="flex flex-col justify-center lg:pt-8">
+            <p className="max-w-md text-lg leading-relaxed text-neutral-500">
+              Trigger workflows from webhooks and monitor every execution from a
+              single dashboard.
+            </p>
+
+            <div className="mt-6">
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
+              >
+                Get Started
+                <ArrowRight size={15} />
+              </Link>
             </div>
           </div>
         </div>
-      </section>
 
-      <hr className="doc-divider" />
+        <div className="mt-16">
+          <ExecutionPreview />
+        </div>
+      </div>
+    </section>
+  )
+}
 
-      {/* Features */}
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "72px 32px" }}>
-        <p className="tag" style={{ marginBottom: 16 }}>Built for production</p>
-        <h2 style={{ fontSize: 30, fontWeight: 300, letterSpacing: "-0.03em", color: "#fff", lineHeight: 1.2, marginBottom: 36, maxWidth: 440 }}>
-          Everything you need to ship event-driven systems.
-        </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
-          {[
-            { title: "Webhook Triggers",    desc: "Auto-generated endpoints with HMAC-SHA256 signed payloads and replay protection." },
-            { title: "Queue Processing",    desc: "Durable job queue with exponential backoff, retry logic, and dead-letter handling." },
-            { title: "Execution Tracking",  desc: "Per-run timelines, structured logs, and event payloads searchable across all workflows." },
-            { title: "Failure Monitoring",  desc: "Alerts on failure spikes, full stack traces, and status visibility across your workspace." },
-          ].map(c => (
-            <div key={c.title} className="feature-card">
-              <p style={{ fontSize: 13, fontWeight: 500, color: "#fff", marginBottom: 8 }}>{c.title}</p>
-              <p style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.65 }}>{c.desc}</p>
-            </div>
+function ExecutionPreview() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-xl">
+      <div className="flex items-center justify-between border-b border-neutral-800 px-4 py-3">
+        <div className="flex gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-full bg-neutral-700" />
+          <div className="h-2.5 w-2.5 rounded-full bg-neutral-700" />
+          <div className="h-2.5 w-2.5 rounded-full bg-neutral-700" />
+        </div>
+
+        <span className="font-mono text-[10px] text-neutral-500">
+          Execution #a8f3b21
+        </span>
+
+        <div className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+          <span className="font-mono text-[10px] text-green-400">
+            SUCCESS
+          </span>
+        </div>
+      </div>
+
+      <div className="px-4 py-3">
+        {executions.map((execution) => (
+          <ExecutionRow
+            key={`${execution.time}-${execution.message}`}
+            execution={execution}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ExecutionRow({
+  execution,
+}: {
+  execution: (typeof executions)[number]
+}) {
+  const isSuccess = execution.level === "SUCCESS"
+
+  return (
+    <div className="flex items-start gap-3 border-b border-neutral-800/50 py-2 last:border-0">
+      <span className="shrink-0 font-mono text-[10px] text-neutral-600">
+        {execution.time}
+      </span>
+
+      <span
+        className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] ${
+          isSuccess
+            ? "bg-green-500/10 text-green-400"
+            : "bg-indigo-500/10 text-indigo-400"
+        }`}
+      >
+        {execution.level}
+      </span>
+
+      <span className="font-mono text-[10px] text-neutral-400">
+        {execution.message}
+      </span>
+    </div>
+  )
+}
+
+function FeaturesSection() {
+  return (
+    <section className="border-t border-neutral-200 py-20">
+      <div className={containerClass}>
+        <div className="mb-12 text-center">
+          <h2 className="text-4xl tracking-tight">
+            Everything needed to run workflows
+          </h2>
+
+          <p className="mt-4 text-neutral-500">
+            Built for reliability, visibility and security.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {features.map((feature) => (
+            <FeatureCard key={feature.title} {...feature} />
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  )
+}
 
-      <hr className="doc-divider" />
+function FeatureCard({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: LucideIcon
+  title: string
+  description: string
+}) {
+  return (
+    <div className={featureCardClass}>
+      <Icon className="mb-4 h-5 w-5 text-indigo-500" />
 
-      {/* Case study — Glasswing-style editorial doc */}
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "72px 32px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 64 }}>
+      <h3 className="mb-2 text-sm font-medium">
+        {title}
+      </h3>
 
-          {/* TOC */}
-          <div style={{ position: "sticky", top: 68, alignSelf: "start" }}>
-            <p style={{ fontSize: 11, fontWeight: 500, color: "#2a2a2a", marginBottom: 14, letterSpacing: "0.02em" }}>Table of Contents</p>
-            {["Overview", "The problem", "How Relay works", "Implementation", "Results"].map((item, i) => (
-              <div key={item} className="toc-item">
-                <span style={{ width: 8, height: 8, background: i === 0 ? "#6366f1" : "transparent", border: i === 0 ? "none" : "1px solid #222", borderRadius: 2, flexShrink: 0 }} />
-                <p style={{ fontSize: 12, color: i === 0 ? "#fff" : "#444", fontWeight: i === 0 ? 500 : 400 }}>{item}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Editorial content */}
-          <div>
-            <p className="tag" style={{ marginBottom: 12 }}>Case study · Stripe Payment Pipeline</p>
-            <h2 style={{ fontSize: 26, fontWeight: 300, letterSpacing: "-0.03em", color: "#fff", lineHeight: 1.25, marginBottom: 20, maxWidth: 500 }}>
-              How teams use Relay to automate critical payment workflows
-            </h2>
-            <p style={{ fontSize: 15, fontWeight: 300, color: "#555", lineHeight: 1.8, marginBottom: 32, maxWidth: 540 }}>
-              Modern SaaS products rely on dozens of event streams — payments, signups, failures, deployments. Managing these events reliably across services requires infrastructure most teams don't have time to build.
-            </p>
-
-            <h3 style={{ fontSize: 14, fontWeight: 500, color: "#fff", marginBottom: 10 }}>The problem</h3>
-            <p style={{ fontSize: 14, fontWeight: 300, color: "#555", lineHeight: 1.8, marginBottom: 28, maxWidth: 540 }}>
-              When Stripe fires a <code className="code-inline">payment.succeeded</code> event, teams need to send a receipt email, update their database, notify Slack, and trigger fulfillment — all reliably, with retry logic, and with a full audit trail. Building this manually takes weeks and breaks constantly.
-            </p>
-
-            <h3 style={{ fontSize: 14, fontWeight: 500, color: "#fff", marginBottom: 10 }}>How Relay works</h3>
-            <p style={{ fontSize: 14, fontWeight: 300, color: "#555", lineHeight: 1.8, marginBottom: 20, maxWidth: 540 }}>
-              You point Stripe's webhook settings at a Relay-generated endpoint. Every event Stripe sends is received, verified with HMAC-SHA256, and processed through your configured workflow — no servers, no queue infrastructure, no ops overhead.
-            </p>
-
-            {/* Inline trace */}
-            <div style={{ background: "#0d0d0d", border: "1px solid #161616", borderRadius: 10, overflow: "hidden", marginBottom: 28 }}>
-              <div style={{ padding: "8px 14px", borderBottom: "1px solid #111", display: "flex", justifyContent: "space-between" }}>
-                <span className="tag">Execution trace · ex_a8f3b21</span>
-                <span className="relay-mono" style={{ fontSize: 10, color: "#4ade80" }}>Completed in 284ms</span>
-              </div>
-              <div style={{ padding: "4px 14px 8px" }}>
-                {[
-                  { t: ":11.024", l: "INFO",    m: "Event received · payment.succeeded · $49.00 USD", ok: false },
-                  { t: ":11.041", l: "INFO",    m: "Job enqueued · Stripe Payment Notifier",          ok: false },
-                  { t: ":11.118", l: "INFO",    m: "Worker picked up job · sending receipt email",    ok: false },
-                  { t: ":11.308", l: "SUCCESS", m: "Email delivered · billing@acme.co",               ok: true  },
-                  { t: ":11.312", l: "SUCCESS", m: "Execution complete · 284ms",                      ok: true  },
-                ].map((r, i) => (
-                  <div key={i} className="log-row">
-                    <span className="relay-mono" style={{ fontSize: 10, color: "#1f1f1f", flexShrink: 0 }}>{r.t}</span>
-                    <span className="relay-mono" style={{ fontSize: 9, color: r.ok ? "#4ade80" : "#6366f1", background: r.ok ? "rgba(74,222,128,0.08)" : "rgba(99,102,241,0.08)", padding: "2px 5px", borderRadius: 3, flexShrink: 0 }}>{r.l}</span>
-                    <span className="relay-mono" style={{ fontSize: 10, color: "#333" }}>{r.m}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <h3 style={{ fontSize: 14, fontWeight: 500, color: "#fff", marginBottom: 10 }}>Implementation</h3>
-            <p style={{ fontSize: 14, fontWeight: 300, color: "#555", lineHeight: 1.8, marginBottom: 28, maxWidth: 540 }}>
-              Relay uses HMAC-SHA256 with <code className="code-inline">timingSafeEqual</code> from Node's built-in <code className="code-inline">crypto</code> module to verify every incoming request against your workspace signing secret — preventing timing attacks. Invalid requests are rejected with a <code className="code-inline">401</code> before any processing begins. Jobs retry up to three times with exponential backoff.
-            </p>
-
-            <h3 style={{ fontSize: 14, fontWeight: 500, color: "#fff", marginBottom: 14 }}>Results</h3>
-            <div>
-              {[
-                { label: "Total executions processed",           value: "18,398" },
-                { label: "Average execution latency",            value: "284ms" },
-                { label: "Success rate across all workflows",    value: "97.5%" },
-                { label: "Failed executions recovered via retry",value: "94%" },
-                { label: "Time to debug a failure",              value: "< 30 seconds" },
-              ].map(r => (
-                <div key={r.label} className="doc-row">
-                  <span style={{ fontSize: 13, color: "#555" }}>{r.label}</span>
-                  <span className="relay-mono" style={{ fontSize: 13, color: "#fff" }}>{r.value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <hr className="doc-divider" />
-
-      {/* Footer */}
-      <footer style={{ maxWidth: 960, margin: "0 auto", padding: "24px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 20, height: 20, background: "#6366f1", borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span className="relay-mono" style={{ color: "#fff", fontSize: 9, fontWeight: 500 }}>R</span>
-          </div>
-          <span className="relay-mono" style={{ fontSize: 11, color: "#222" }}>© 2025 Relay Labs, Inc.</span>
-        </div>
-        <div style={{ display: "flex", gap: 24 }}>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="relay-mono" style={{ fontSize: 11, color: "#333" }}>GitHub</a>
-          <Link href="/login" className="relay-mono" style={{ fontSize: 11, color: "#333" }}>Sign in</Link>
-        </div>
-      </footer>
-
+      <p className="text-sm leading-relaxed text-neutral-500">
+        {description}
+      </p>
     </div>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-neutral-200 py-8">
+      <div
+        className={`${containerClass} flex items-center justify-between`}
+      >
+        <div className="flex items-center gap-2">
+          <div className="flex h-5 w-5 items-center justify-center rounded bg-indigo-500">
+            <span className="font-mono text-[9px] font-medium text-white">
+              R
+            </span>
+          </div>
+
+          <span className="font-mono text-[11px] text-neutral-400">
+            © 2026 Relay
+          </span>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+export function LandingPage() {
+  return (
+    <main className="min-h-screen bg-white text-neutral-900">
+      <Header />
+      <HeroSection />
+      <FeaturesSection />
+      <Footer />
+    </main>
   )
 }
