@@ -2,6 +2,7 @@ import "dotenv/config"
 import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { hash } from "bcryptjs"
+import { randomBytes } from "crypto"
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -10,14 +11,12 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter })
 
 const generateSecret = () => {
-  const { randomBytes } = require("crypto")
   return `whsec_${randomBytes(32).toString("hex")}`
 }
 
 async function main() {
   console.log("Seeding database...")
 
-  // Clean existing seed data
   await prisma.executionLog.deleteMany()
   await prisma.execution.deleteMany()
   await prisma.workflow.deleteMany()
@@ -25,7 +24,6 @@ async function main() {
   await prisma.workspace.deleteMany()
   await prisma.user.deleteMany()
 
-  // Create demo user
   const passwordHash = await hash("demo123456", 12)
 
   const user = await prisma.user.create({
@@ -43,9 +41,8 @@ async function main() {
   })
 
   const workspaceId = user.workspace!.id
-  console.log(`Created user: ${user.email}`)
+  console.log(`User created: ${user.email}`)
 
-  // Create workflows
   const stripeWorkflow = await prisma.workflow.create({
     data: {
       workspaceId,
@@ -54,8 +51,7 @@ async function main() {
       actionConfig: {
         recipient: "billing@acme.co",
         subject: "New payment: {{event.type}}",
-        template:
-          "A new payment of {{event.amount}} {{event.currency}} was received.",
+        template: "Payment of {{event.amount}} {{event.currency}} received.",
       },
       status: "ACTIVE",
     },
@@ -93,15 +89,14 @@ async function main() {
       actionConfig: {
         recipient: "team@acme.co",
         subject: "Alert: {{event.type}}",
-        template: "New alert received from {{event.source}}.",
+        template: "Alert received from {{event.source}}",
       },
       status: "DISABLED",
     },
   })
 
-  console.log("Created 4 workflows")
+  console.log("Workflows created")
 
-  // Helper to create execution with logs
   const createExecution = async (
     workflowId: string,
     status: string,
@@ -109,7 +104,8 @@ async function main() {
     minutesAgo: number,
     logs: { level: string; message: string; offsetMs: number }[]
   ) => {
-    const startedAt = new Date(Date.now() - minutesAgo * 60 * 1000)
+    const startedAt = new Date(Date.now() - minutesAgo * 60000)
+
     const completedAt =
       status === "SUCCESS" || status === "FAILED"
         ? new Date(startedAt.getTime() + durationMs)
@@ -137,125 +133,54 @@ async function main() {
           executionId: execution.id,
           level: log.level,
           message: log.message,
-          timestamp: new Date(startedAt.getTime() + log.offsetMs),
-        },
+          timestamp: new Date(startedAt.getTime() + log.offsetMs)
+        }
       })
     }
 
     return execution
   }
 
-  // SUCCESS executions
-  await createExecution(
-    stripeWorkflow.id,
-    "SUCCESS",
-    389,
-    0,
-    [
-      { level: "INFO", message: "Event received from 54.187.174.169", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: Stripe Payment Notifier", offsetMs: 17 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 94 },
-      { level: "INFO", message: "Sending email to billing@acme.co", offsetMs: 120 },
-      { level: "SUCCESS", message: "Email delivered to billing@acme.co", offsetMs: 380 },
-      { level: "SUCCESS", message: "Execution completed in 389ms", offsetMs: 389 },
-    ]
-  )
+  await createExecution(stripeWorkflow.id, "SUCCESS", 389, 0, [
+    { level: "INFO", message: "Webhook received (54.187.174.169)", offsetMs: 0 },
+    { level: "INFO", message: "Queued for Stripe Payment Notifier", offsetMs: 17 },
+    { level: "INFO", message: "Worker picked up job", offsetMs: 94 },
+    { level: "INFO", message: "Sending email → billing@acme.co", offsetMs: 120 },
+    { level: "SUCCESS", message: "Delivered to billing@acme.co", offsetMs: 380 }
+  ])
 
-  await createExecution(
-    githubWorkflow.id,
-    "SUCCESS",
-    498,
-    9,
-    [
-      { level: "INFO", message: "Event received from 140.82.112.0", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: GitHub Issue → Linear Sync", offsetMs: 12 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 88 },
-      { level: "INFO", message: "Forwarding payload to https://linear.app/webhook/inbound/github", offsetMs: 100 },
-      { level: "SUCCESS", message: "Payload forwarded — received 200", offsetMs: 490 },
-      { level: "SUCCESS", message: "Execution completed in 498ms", offsetMs: 498 },
-    ]
-  )
+  await createExecution(githubWorkflow.id, "SUCCESS", 498, 9, [
+    { level: "INFO", message: "Webhook received (140.82.112.0)", offsetMs: 0 },
+    { level: "INFO", message: "Queued for GitHub → Linear sync", offsetMs: 12 },
+    { level: "INFO", message: "Worker started processing", offsetMs: 88 },
+    { level: "INFO", message: "Forwarding to Linear webhook", offsetMs: 100 },
+    { level: "SUCCESS", message: "Linear responded 200 OK", offsetMs: 490 }
+  ])
 
-  await createExecution(
-    stripeWorkflow.id,
-    "SUCCESS",
-    116,
-    24,
-    [
-      { level: "INFO", message: "Event received from 54.187.174.169", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: Stripe Payment Notifier", offsetMs: 10 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 50 },
-      { level: "INFO", message: "Sending email to billing@acme.co", offsetMs: 60 },
-      { level: "SUCCESS", message: "Email delivered to billing@acme.co", offsetMs: 110 },
-      { level: "SUCCESS", message: "Execution completed in 116ms", offsetMs: 116 },
-    ]
-  )
+  await createExecution(shopifyWorkflow.id, "FAILED", 266, 35, [
+    { level: "INFO", message: "Webhook received (23.227.38.65)", offsetMs: 0 },
+    { level: "INFO", message: "Queued for Shopify order forwarding", offsetMs: 15 },
+    { level: "INFO", message: "Worker started", offsetMs: 60 },
+    { level: "INFO", message: "Sending to fulfillment service", offsetMs: 80 },
+    { level: "ERROR", message: "503 Service Unavailable", offsetMs: 260 }
+  ])
 
-  await createExecution(
-    slackWorkflow.id,
-    "SUCCESS",
-    196,
-    13,
-    [
-      { level: "INFO", message: "Event received from 192.168.1.1", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: Internal Slack Alerts", offsetMs: 8 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 40 },
-      { level: "INFO", message: "Sending email to team@acme.co", offsetMs: 50 },
-      { level: "SUCCESS", message: "Email delivered to team@acme.co", offsetMs: 190 },
-      { level: "SUCCESS", message: "Execution completed in 196ms", offsetMs: 196 },
-    ]
-  )
+  await createExecution(stripeWorkflow.id, "FAILED", 186, 60, [
+    { level: "INFO", message: "Webhook received (54.187.174.169)", offsetMs: 0 },
+    { level: "INFO", message: "Queued for Stripe Payment Notifier", offsetMs: 12 },
+    { level: "INFO", message: "Worker picked up job", offsetMs: 55 },
+    { level: "ERROR", message: "Invalid API key (Resend)", offsetMs: 180 }
+  ])
 
-  // FAILED executions
-  await createExecution(
-    shopifyWorkflow.id,
-    "FAILED",
-    266,
-    35,
-    [
-      { level: "INFO", message: "Event received from 23.227.38.65", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: Shopify Order Forwarder", offsetMs: 15 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 60 },
-      { level: "INFO", message: "Forwarding payload to https://fulfillment.acme.co/orders", offsetMs: 80 },
-      { level: "ERROR", message: "Target URL responded with 503: Service Unavailable", offsetMs: 260 },
-      { level: "ERROR", message: "Execution failed: Target URL responded with 503", offsetMs: 266 },
-    ]
-  )
+  await createExecution(shopifyWorkflow.id, "RETRYING", 0, 5, [
+    { level: "INFO", message: "Webhook received (23.227.38.65)", offsetMs: 0 },
+    { level: "INFO", message: "Job queued", offsetMs: 10 },
+    { level: "WARN", message: "Retry scheduled after failure", offsetMs: 200 }
+  ])
 
-  await createExecution(
-    stripeWorkflow.id,
-    "FAILED",
-    186,
-    60,
-    [
-      { level: "INFO", message: "Event received from 54.187.174.169", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: Stripe Payment Notifier", offsetMs: 12 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 55 },
-      { level: "INFO", message: "Sending email to billing@acme.co", offsetMs: 70 },
-      { level: "ERROR", message: "Resend error: Invalid API key", offsetMs: 180 },
-      { level: "ERROR", message: "Execution failed: Resend error: Invalid API key", offsetMs: 186 },
-    ]
-  )
-
-  // RETRYING execution
-  await createExecution(
-    shopifyWorkflow.id,
-    "RETRYING",
-    0,
-    5,
-    [
-      { level: "INFO", message: "Event received from 23.227.38.65", offsetMs: 0 },
-      { level: "INFO", message: "Job queued for workflow: Shopify Order Forwarder", offsetMs: 10 },
-      { level: "INFO", message: "Worker picked up job", offsetMs: 45 },
-      { level: "WARN", message: "Attempt 1 failed — retrying with backoff", offsetMs: 200 },
-    ]
-  )
-
-  console.log("Created 7 executions with logs")
-  console.log("\nSeed complete.")
-  console.log("Demo credentials:")
-  console.log("  Email: demo@relay.dev")
-  console.log("  Password: demo123456")
+  console.log("Executions created")
+  console.log("Seed complete")
+  console.log("demo@relay.dev / demo123456")
 }
 
 main()
